@@ -1,0 +1,23 @@
+Add-PSSnapin Microsoft.SharePoint.PowerShell -ErrorAction SilentlyContinue
+
+    $webUrl = "HTTP://SITEURL"
+    $listname = "LISTNAME"
+    $fieldname = "FIELDNAME"
+    $IsRequired = $False
+    $FieldType = [Microsoft.SharePoint.SPFieldType]::Text
+
+    $site = Get-SPSite $webUrl
+    $Web = $site.OpenWeb()
+    $list = $web.Lists.TryGetList($listname)
+    $field = $list.Fields[$fieldname];
+
+    if($field -eq $null)
+    {
+        $list.Fields.Add($fieldname,$FieldType,$IsRequired)
+        $list.Update()
+        Write-Host $fieldname "is created"
+    }
+    else
+    {
+        Write-Host $fieldname "is already exist"
+    }
